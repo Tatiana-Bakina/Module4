@@ -38,4 +38,5 @@ git clone https://github.com/Tatiana-Bakina/Module4
 - Проверка покрытия: `pytest --cov=src --cov-report=term`
 - Генерация HTML‑отчёта: `poetry run pytest --cov=src --cov-report=html`
 
+
 ### Автор: Татьяна Бакина
