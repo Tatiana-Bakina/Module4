@@ -37,6 +37,6 @@ git clone https://github.com/Tatiana-Bakina/Module4
 - Запуск всех тестов: `pytest tests/`
 - Проверка покрытия: `pytest --cov=src --cov-report=term`
 - Генерация HTML‑отчёта: `poetry run pytest --cov=src --cov-report=html`
-
+- Отчёт о покрытии: ![coverage](coverage_report.png)
 
 ### Автор: Татьяна Бакина
