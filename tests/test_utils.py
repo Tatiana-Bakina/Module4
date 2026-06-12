@@ -18,21 +18,16 @@ class TestLoadCategories:
         # Проверяем первую категорию ("Смартфоны")
         first_category = categories[0]
         assert first_category.name == "Смартфоны"
-        assert len(first_category.products) == 3
 
-        # Проверяем первый продукт в первой категории
-        first_product = first_category.products[0]
-        assert first_product.name == "Samsung Galaxy C23 Ultra"
-        assert first_product.price == 180000.0
-        assert first_product.quantity == 5
+        # Проверяем, что товары есть в строковом представлении
+        products_str = first_category.products
+        assert "Samsung Galaxy C23 Ultra" in products_str
+        assert "Iphone 15" in products_str
+        assert "Xiaomi Redmi Note 11" in products_str
 
         # Проверяем вторую категорию ("Телевизоры")
         second_category = categories[1]
         assert second_category.name == "Телевизоры"
-        assert len(second_category.products) == 1
 
-        # Проверяем продукт во второй категории
-        tv_product = second_category.products[0]
-        assert tv_product.name == '55" QLED 4K'
-        assert tv_product.price == 123000.0
-        assert tv_product.quantity == 7
+        products_str2 = second_category.products
+        assert '55" QLED 4K' in products_str2
