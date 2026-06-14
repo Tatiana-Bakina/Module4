@@ -3,7 +3,6 @@ class Product:
 
     name: str
     description: str
-    price: float
     quantity: int
 
     def __init__(self, name, description, price, quantity):
@@ -11,5 +10,52 @@ class Product:
 
         self.name = name
         self.description = description
-        self.price = price
+        self.__price = price
         self.quantity = quantity
+
+    @classmethod
+    def new_product(cls, product_dict, existing_products=None):
+        """
+        Создаёт новый продукт из словаря.
+        Если продукт с таким именем уже есть в existing_products, обновляет его.
+        """
+        if existing_products is None:
+            existing_products = []
+
+        name = product_dict["name"]
+        description = product_dict["description"]
+        price = product_dict["price"]
+        quantity = product_dict["quantity"]
+
+        # Проверка наличия продукта с таким же именем
+        for existing in existing_products:
+            if existing.name == name:
+                # Обновляем количество и цену
+                existing.quantity += quantity
+                existing.price = max(existing.price, price)
+                return existing
+
+        # Если товара с таким же именем нет, то создаём новый товар
+        return cls(name, description, price, quantity)
+
+    @property
+    def price(self):
+        """Геттер для цены"""
+        return self.__price
+
+    @price.setter
+    def price(self, new_price):
+        """Сеттер для цены с проверкой"""
+        # Проверка на отрицательную или нулевую цену
+        if new_price <= 0:
+            print("Цена не должна быть нулевая или отрицательная")
+            return
+
+        # Проверка на понижение цены
+        if new_price < self.__price:
+            answer = input("Новая цена ниже текущей. Вы уверены? Введите y или n: ")
+            if answer == "y":
+                self.__price = new_price
+            # Если ответ не "y" — ничего не меняем
+        else:
+            self.__price = new_price
