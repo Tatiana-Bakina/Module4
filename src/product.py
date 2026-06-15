@@ -59,3 +59,10 @@ class Product:
             # Если ответ не "y" — ничего не меняем
         else:
             self.__price = new_price
+
+    def __str__(self):
+        return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
+
+    def __add__(self, other):
+        """Складывает товары и возвращает их полную стоимость"""
+        return self.__price * self.quantity + other.__price * other.quantity
