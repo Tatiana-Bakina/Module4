@@ -1,5 +1,6 @@
+import pytest
 from src.category import Category
-from src.product import Product
+from src.product import Product, Smartphone, LawnGrass
 
 
 class TestCategory:
@@ -86,3 +87,71 @@ class TestCategory:
         str_category = "Смартфоны, количество продуктов: 27 шт."
 
         assert str(category) == str_category
+
+
+class TestCategoryAddProduct:
+    """Тесты для метода add_product с проверкой типов"""
+
+    def setup_method(self):
+        """Обнуляем счётчики перед каждым тестом"""
+        Category.category_count = 0
+        Category.product_count = 0
+
+    def test_add_product_valid_types(self):
+        """Добавление продуктов разных типов — работает"""
+        category = Category("Тест", "Описание")
+
+        product = Product("Ноутбук", "Описание", 50000, 5)
+        phone = Smartphone(
+            "Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5, 95.5, "S23 Ultra", 256, "Серый"
+        )
+        grass = LawnGrass("Газонная трава", "Элитная трава для газона", 500.0, 20, "Россия", "7 дней", "Зеленый")
+
+        category.add_product(product)
+        category.add_product(phone)
+        category.add_product(grass)
+
+        # Проверка счётчика
+        assert Category.product_count == 3
+
+        # Проверка, что товары добавились через геттер
+        products_str = category.products
+        assert "Ноутбук" in products_str
+        assert "Samsung Galaxy S23 Ultra" in products_str
+        assert "Газонная трава" in products_str
+
+    def test_add_product_invalid_type_raises_error(self):
+        """Добавление непродукта — ошибка TypeError"""
+        category = Category("Тест", "Описание")
+
+        # добавление строки
+        with pytest.raises(TypeError, match="Можно добавлять только объекты класса Product или его наследников"):
+            category.add_product("не товар")
+
+        # добавление числа
+        with pytest.raises(TypeError):
+            category.add_product(123)
+
+        # добавление списка
+        with pytest.raises(TypeError):
+            category.add_product([])
+
+        # добавление словаря
+        with pytest.raises(TypeError):
+            category.add_product({"name": "товар"})
+
+    def test_add_product_keeps_counters(self):
+        """Проверка счётчиков при добавлении"""
+        category = Category("Тест", "Описание")
+        assert Category.category_count == 1
+        assert Category.product_count == 0
+
+        product = Product("Ноутбук", "Описание", 50000, 5)
+        category.add_product(product)
+        assert Category.product_count == 1
+
+        phone = Smartphone(
+            "Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5, 95.5, "S23 Ultra", 256, "Серый"
+        )
+        category.add_product(phone)
+        assert Category.product_count == 2
