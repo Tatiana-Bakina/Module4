@@ -1,5 +1,5 @@
 import pytest
-from src.product import Product, Smartphone, LawnGrass
+from src.product import BaseProduct, Product, Smartphone, LawnGrass
 
 
 class TestProduct:
@@ -204,3 +204,31 @@ class TestProductAddTypeCheck:
 
         with pytest.raises(TypeError, match="Нельзя складывать товары разных классов"):
             _ = phone + grass
+
+
+class TestBaseProduct:
+    def test_base_product_cant_be_instantiated(self):
+        """Тест: нельзя создать объект абстрактного класса"""
+        with pytest.raises(TypeError):
+            BaseProduct()  # Должен выбросить TypeError
+
+    def test_product_inherits_base_product(self):
+        """Тест: Product наследует BaseProduct"""
+        assert issubclass(Product, BaseProduct)
+        assert issubclass(Smartphone, BaseProduct)
+        assert issubclass(LawnGrass, BaseProduct)
+
+
+class TestMixinProductInfo:
+    def test_mixin_logs_on_creation(self, capsys):
+        """Тест: при создании объекта миксин выводит лог"""
+        Product("Тестовый продукт", "Описание", 1000, 5)
+        captured = capsys.readouterr()
+        expected = "Product('Тестовый продукт', 'Описание', 1000, 5)"
+        assert expected in captured.out
+
+    def test_mixin_repr(self):
+        """Тест: __repr__ возвращает строку с параметрами"""
+        product = Product("Тестовый продукт", "Описание", 1000, 5)
+        expected = "Product(Тестовый продукт, Описание, 1000, 5)"
+        assert repr(product) == expected
