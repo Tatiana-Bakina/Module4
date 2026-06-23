@@ -232,3 +232,29 @@ class TestMixinProductInfo:
         product = Product("Тестовый продукт", "Описание", 1000, 5)
         expected = "Product(Тестовый продукт, Описание, 1000, 5)"
         assert repr(product) == expected
+
+
+class TestProductQuantity:
+    def test_zero_quantity(self):
+        """ "Тест: добавление товара с нулевым количеством вызывает исключение"""
+        with pytest.raises(ValueError, match="Товар с нулевым количеством не может быть добавлен."):
+            Product("Тестовый продукт", "Описание", 1000, 0)
+
+    def test_smartphone_zero_quantity(self):
+        """Тест: добавление смартфона с нулевым количеством вызывает исключение"""
+        with pytest.raises(ValueError, match="Товар с нулевым количеством не может быть добавлен."):
+            Smartphone(
+                "Samsung Galaxy S23 Ultra",
+                "256GB, Серый цвет, 200MP камера",
+                180000.0,
+                0,
+                95.5,
+                "S23 Ultra",
+                256,
+                "Серый",
+            )
+
+    def test_lawngrass_zero_quantity(self):
+        """Тест: добавление газонной травы с нулевым количеством вызывает исключение"""
+        with pytest.raises(ValueError, match="Товар с нулевым количеством не может быть добавлен."):
+            LawnGrass("Газонная трава", "Элитная трава для газона", 500.0, 0, "Россия", "7 дней", "Зеленый")
